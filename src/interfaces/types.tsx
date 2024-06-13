@@ -6,7 +6,7 @@ export interface Product {
   price_min: number;
   addCart: boolean;
   favorited: boolean;
-  localID: string;
+  localID: number;
   compare_at_price_min: number;
   tags: string[];
   "offer-message": string;

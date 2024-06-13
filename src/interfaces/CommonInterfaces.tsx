@@ -1,5 +1,6 @@
 import { ColorSchemeName } from "react-native";
 import Animated, { AnimateStyle } from "react-native-reanimated";
+import { Product } from "./types";
 
 export interface ImageItem {
   id: string;
@@ -24,10 +25,13 @@ export interface InnerLayoutProps {
 
 export interface CartContextType {
   cartCount: number;
-  handleCartClick: () => void;
-  handleRemoveCartClick: () => void;
+  handleCartClick: (item : any) => void;
+  handleRemoveCartClick: (item : any) => void;
+  handleFavoriteClick: (item: Product) => void,
+  handleRemoveFavoriteClick: (item: Product) => void,
   bounceAnim: Animated.SharedValue<number>;
   animatedStyle: AnimateStyle<{}>; 
+  localProductList : Product[]
 
 }
 

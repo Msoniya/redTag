@@ -19,12 +19,18 @@ function ProductScreen() {
   const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { language, isRTL } = useLanguage();
-  const { handleCartClick, handleRemoveCartClick } = useCart();
+  const { handleCartClick, handleRemoveCartClick, localProductList, handleFavoriteClick, handleRemoveFavoriteClick } = useCart();
   const styles = useDynamicStyles(isRTL);
 
   useEffect(() => {
     fetchData();
   }, [language]);
+
+  useEffect(() => {
+    syncProductStates();
+    console.log(localProductList);
+  }, [localProductList]); 
+
 
   const fetchData = async () => {
     try {
@@ -38,9 +44,9 @@ function ProductScreen() {
           return {
             ...product,
             images: imageArray,
-            favorited: false,
+            favorited: localProductList.some((item) => item.localID == index && item.favorited),
+            addCart: localProductList.some((item) => item.localID == index && item.addCart),
             localID: index,
-            addCart: false,
           };
         });
         setProductList(updatedProductList);
@@ -53,6 +59,21 @@ function ProductScreen() {
     } finally {
       setMainLoading(false);
     }
+  };
+
+  const syncProductStates = () => {
+    const updatedDisplayedProducts = displayedProducts.map(product => {
+      const localProduct = localProductList.find(item => item.localID === product.localID);
+      if (localProduct) {
+        return {
+          ...product,
+          favorited: localProduct.favorited,
+          addCart: localProduct.addCart,
+        };
+      }
+      return product;
+    });
+    setDisplayedProducts(updatedDisplayedProducts);
   };
 
   const loadMoreData = () => {
@@ -69,32 +90,38 @@ function ProductScreen() {
     }
   };
 
-  const toggleFavorite = (productId: string) => {
-    setDisplayedProducts(prevProducts =>
-      prevProducts.map(product =>
-        product.localID === productId ? { ...product, favorited: !product.favorited } : product
-      )
-    );
+  const toggleFavorite = (productId: number) => {
+    const updatedDisplayedProducts = displayedProducts.map(product => {
+      if (product.localID === productId) {
+        const updatedProduct = { ...product, favorited: !product.favorited };
+        if (updatedProduct.favorited) {
+          handleFavoriteClick(updatedProduct);
+        } else {
+          handleRemoveFavoriteClick(updatedProduct);
+        }
+        return updatedProduct;
+      }
+      return product;
+    });
+    setDisplayedProducts(updatedDisplayedProducts);
   };
 
-  const toggleAddCart = (productId: string) => {
-    setDisplayedProducts(prevProducts => 
-      prevProducts.map(product => {
-        if (product.localID === productId) {
-          const updatedProduct = { ...product, addCart: !product.addCart };
-          if (updatedProduct.addCart) {
-            handleCartClick();
-          } else {
-            handleRemoveCartClick();
-          }
-          return updatedProduct;
+  const toggleAddCart = (productId: number) => {
+    const updatedDisplayedProducts = displayedProducts.map(product => {
+      if (product.localID === productId) {
+        const updatedProduct = { ...product, addCart: !product.addCart };
+        if (updatedProduct.addCart) {
+          handleCartClick(updatedProduct);
+        } else {
+          handleRemoveCartClick(updatedProduct);
         }
-        return product;
-      })
-    );
+        return updatedProduct;
+      }
+      return product;
+    });
+    setDisplayedProducts(updatedDisplayedProducts);
   };
   
-
   const renderItem = ({ item, index }: { item: Product, index: number }) => {
     const { localID, favorited, addCart, images, tags, title, currency, price_min, compare_at_price_min, 'offer-message': offerMessage } = item;
     const offerText = offerMessage ? offerMessage.substring(6, offerMessage.indexOf(',')).trim() : '';
