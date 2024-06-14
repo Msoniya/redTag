@@ -12,7 +12,7 @@ const useDynamicStyles = (isRTL : boolean) => {
         ...(isRTL && { flexDirection: 'row-reverse' }),
       },
       langToolbarText:{
-          fontSize: 20,
+          fontSize: 18,
           justifyContent:'center',
           alignItems:'center',
           fontWeight:'bold',
@@ -42,7 +42,6 @@ const useDynamicStyles = (isRTL : boolean) => {
           height: 2,
         },
         elevation: 10,
-        // ...(isRTL && { flexDirection: 'row-reverse' }),
       },
       iconContainer: {
         position: 'absolute',
@@ -121,6 +120,8 @@ const useDynamicStyles = (isRTL : boolean) => {
       iconsSpace: {
         marginLeft: 10,
         marginRight: 10,
+        justifyContent:'center',
+        alignItems:'center'
       },
       loading: {
         paddingVertical: 20,
@@ -181,8 +182,10 @@ const useDynamicStyles = (isRTL : boolean) => {
       },
       badgeText: {
         color: 'white',
-        fontSize: 12,
+        fontSize: 10,
         fontWeight: 'bold',
+        justifyContent:'center',
+        textAlign:'center'
       },
     });
   }, [isRTL]);

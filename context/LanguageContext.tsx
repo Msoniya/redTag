@@ -30,9 +30,6 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     const fetchLanguage = async () => {
       const storedLanguage = await getLocalLanguage();
       const storedIsRTL = await getLocalRTL();
-      console.log('storedLanguage', storedLanguage);
-      console.log('ISRTL ', isRTL);
-      console.log('storedIsRTL ', storedIsRTL);
       if (storedLanguage) {
        await setLanguage(storedLanguage);
        await setIsRTL(storedIsRTL);

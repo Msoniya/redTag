@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, FlatList, Image, ActivityIndicator, TouchableOpacity, I18nManager } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { View, Text, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, Animated } from "react-native";
 import { Product } from '@/interfaces/types';
 import axios from "axios";
 import { BASE_URL } from "@/src/api/API";
@@ -33,7 +33,6 @@ function ProductScreen() {
   const fetchData = async () => {
     try {
       setMainLoading(true);
-      console.log('URL:', BASE_URL + language);
       const response = await axios.get(BASE_URL + language);
       if (response.status === 200) {
         const productData = response.data?.data?.products;
@@ -104,7 +103,7 @@ function ProductScreen() {
       }, 1500);
     }
   };
-
+  const heartAnimations = useRef(new Map()).current;
   const toggleFavorite = (productId: number) => {
     const updatedDisplayedProducts = displayedProducts.map(product => {
       if (product.localID === productId) {
@@ -113,6 +112,13 @@ function ProductScreen() {
           handleFavoriteClick(updatedProduct);
         } else {
           handleRemoveFavoriteClick(updatedProduct);
+        }
+        const animationValue = heartAnimations.get(productId);
+        if (animationValue) {
+          Animated.sequence([
+            Animated.timing(animationValue, { toValue: 1.5, duration: 200, useNativeDriver: true }),
+            Animated.spring(animationValue, { toValue: 1, useNativeDriver: true }),
+          ]).start();
         }
         return updatedProduct;
       }
@@ -140,13 +146,18 @@ function ProductScreen() {
   const renderItem = ({ item, index }: { item: Product, index: number }) => {
     const { localID, favorited, addCart, images, tags, title, currency, price_min, compare_at_price_min, 'offer-message': offerMessage } = item;
     const offerText = offerMessage ? offerMessage.substring(6, offerMessage.indexOf(',')).trim() : '';
+    if (!heartAnimations.has(localID)) {
+      heartAnimations.set(localID, new Animated.Value(1));
+    }
     return (
       <View style={styles.card}>
         <View>
           <TouchableOpacity onPress={() => toggleFavorite(localID)}
             style={styles.iconContainer}>
-            <Ionicons name={favorited ? "heart" : "heart-outline"} size={24} color={'red'}
+              <Animated.View style={{ transform: [{ scale: heartAnimations.get(localID) }] }}>
+              <Ionicons name={favorited ? "heart" : "heart-outline"} size={24} color={'red'}
               style={styles.icon} />
+              </Animated.View>
           </TouchableOpacity>
           <SliderImage images={images} />
           <Text style={styles.tagContainer}>

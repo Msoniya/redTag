@@ -47,7 +47,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
           setLocalProductList(storedLocalProducts);
           setCartCount(storedLocalProducts?.length)
         }
-        console.log('local PR', storedLocalProducts);
       } catch (error) {
         console.error('Error fetching local product list from local storage:', error);
       }
@@ -83,7 +82,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     const count = updatedCartItems.length;
     setCartCount(count); 
   } catch(error) {
-    console.log('Handle Cart Click : ', error )
   }
   };
 
@@ -109,13 +107,10 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         await updateLocalProductList(existingCartItems);
         setCartCount(existingCartItems.length); 
       } else {
-        console.log(`Item with localID ${item.localID} not found in cart.`);
       }
     } else {
-      console.log('No existing cart items found.');
     }
   } catch(error) {
-    console.log('handleRemoveCartClick error : ', error);
   }
   };
   
@@ -126,7 +121,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       );
       await updateLocalProductList(updatedLocalProductList);
     } catch (error) {
-      console.log('Handle Favorite Click : ', error);
     }
   };
 
@@ -137,7 +131,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       );
       await updateLocalProductList(updatedLocalProductList);
     } catch (error) {
-      console.log('Handle Remove Favorite Click : ', error);
     }
   };
 
