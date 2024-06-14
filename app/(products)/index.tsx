@@ -28,9 +28,7 @@ function ProductScreen() {
 
   useEffect(() => {
     syncProductStates();
-    console.log(localProductList);
-  }, [localProductList]); 
-
+  }, [localProductList, productList]); 
 
   const fetchData = async () => {
     try {
@@ -62,6 +60,22 @@ function ProductScreen() {
   };
 
   const syncProductStates = () => {
+    const updatedProductList = productList.map(product => {
+      const localProduct = localProductList.find(item => item.localID === product.localID);
+      if (localProduct) {
+        return {
+          ...product,
+          favorited: localProduct.favorited,
+          addCart: localProduct.addCart,
+        };
+      }
+      return product;
+    });
+
+    if (JSON.stringify(productList) !== JSON.stringify(updatedProductList)) {
+      setProductList(updatedProductList);
+    }
+
     const updatedDisplayedProducts = displayedProducts.map(product => {
       const localProduct = localProductList.find(item => item.localID === product.localID);
       if (localProduct) {
@@ -73,12 +87,13 @@ function ProductScreen() {
       }
       return product;
     });
-    setDisplayedProducts(updatedDisplayedProducts);
+    if (JSON.stringify(displayedProducts) !== JSON.stringify(updatedDisplayedProducts)) {
+      setDisplayedProducts(updatedDisplayedProducts);
+    }
   };
 
   const loadMoreData = () => {
     const currentLength = displayedProducts.length;
-    console.log("CurrentLength", currentLength);
     const endIndex = currentLength + loadMoreCount;
     if (endIndex <= productList.length) {
       const nextChunk = productList.slice(currentLength, endIndex);

@@ -53,7 +53,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       }
     };
     fetchLocalProductList();
-  }, [language]);
+  }, []);
   
 
   const updateLocalProductList = async (updatedList: Product[]) => {
@@ -61,9 +61,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     await setLocalCartItem(updatedList);
   };
 
-
   const handleCartClick = async(item: Product) => {
-    console.log("HandleClick ", item);
     try{
     bounceAnim.value = withSequence(
       withTiming(-ANGLE, { duration: TIME / 2, easing: EASING }),
