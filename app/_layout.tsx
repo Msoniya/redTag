@@ -14,7 +14,7 @@ import { InnerLayoutProps } from '@/src/interfaces/CommonInterfaces';
 SplashScreen.preventAutoHideAsync();
 
 
-export default function RootLayout() {
+const RootLayout = () => {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -80,3 +80,5 @@ function InnerLayout({ colorScheme }: InnerLayoutProps) {
     </ThemeProvider>
   );
 }
+
+export default RootLayout;

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { View, Text, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, Animated } from "react-native";
+import { View, Text, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, Animated, useColorScheme } from "react-native";
 import { Product } from '@/interfaces/types';
 import axios from "axios";
 import { BASE_URL } from "@/src/api/API";
@@ -13,7 +13,7 @@ const numColumns = 2;
 const initialLoadCount = 8;
 const loadMoreCount = 4;
 
-function ProductScreen() {
+const ProductScreen = () => {
   const [productList, setProductList] = useState<Product[]>([]);
   const [mainLoading, setMainLoading] = useState<boolean>(false);
   const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
@@ -21,6 +21,7 @@ function ProductScreen() {
   const { language, isRTL } = useLanguage();
   const { handleCartClick, handleRemoveCartClick, localProductList, handleFavoriteClick, handleRemoveFavoriteClick } = useCart();
   const styles = useDynamicStyles(isRTL);
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
     fetchData();
@@ -165,7 +166,7 @@ function ProductScreen() {
           </Text>
           <TouchableOpacity onPress={() => toggleAddCart(localID)}
             style={styles.cartContainer}>
-            <Ionicons name={addCart ? "bag-add" : "bag-add-outline"} size={24} color={addCart ? '#FFA500' : 'black'} />
+            <Ionicons name={addCart ? "bag-add" : "bag-add-outline"} size={24} color={addCart ? '#FFA500' : colorScheme === 'dark' ? 'white' : 'black'} />
           </TouchableOpacity>
         </View>
         <Text style={styles.title}>{title}</Text>

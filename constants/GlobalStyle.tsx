@@ -1,12 +1,14 @@
 import { useMemo } from 'react';
-import { StyleSheet, I18nManager } from 'react-native';
+import { StyleSheet, I18nManager, useColorScheme } from 'react-native';
+import { Colors } from './Colors';
 
 const useDynamicStyles = (isRTL : boolean) => {
+  const colorScheme = useColorScheme();
   return useMemo(() => {
     return StyleSheet.create({
       container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background,
         paddingHorizontal: 10,
         flexDirection: 'row',
         ...(isRTL && { flexDirection: 'row-reverse' }),
@@ -16,6 +18,7 @@ const useDynamicStyles = (isRTL : boolean) => {
           justifyContent:'center',
           alignItems:'center',
           fontWeight:'bold',
+          color: colorScheme === 'dark' ? Colors.dark.text : Colors.light.text,
       },
       sliderContainer: {
         flex: 1,
@@ -28,7 +31,7 @@ const useDynamicStyles = (isRTL : boolean) => {
         flex: 1,
       },
       card: {
-        backgroundColor: '#ffffff',
+        backgroundColor: colorScheme === 'dark' ? '#333333' : '#ffffff',
         flex: 1,
         paddingHorizontal: 5,
         paddingVertical: 5,
@@ -55,12 +58,12 @@ const useDynamicStyles = (isRTL : boolean) => {
         position: 'absolute',
         bottom: 35,
         right: 0,
-        backgroundColor: 'white',
+        backgroundColor: colorScheme === 'dark' ? '#555555' : 'white',
         textAlign: 'center',
         fontSize: 11,
         padding: 3,
         borderRadius: 3,
-        color: 'red',
+        color: colorScheme === 'dark' ? 'orange' : 'red',
         ...(isRTL && { right: 'auto', left: 0 }),
       },
       cartContainer: {
@@ -72,7 +75,7 @@ const useDynamicStyles = (isRTL : boolean) => {
         left: isRTL ? 5 : 'auto',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: colorScheme === 'dark' ? '#555555' : 'white',
         borderRadius: 25,
         shadowColor: '#000000',
         shadowOpacity: 0.2,
@@ -88,7 +91,7 @@ const useDynamicStyles = (isRTL : boolean) => {
       },
       title: {
         fontSize: 12,
-        color: '#333',
+        color: colorScheme === 'dark' ? '#cccccc' : '#333',
         marginVertical: 5,
         marginTop: 10,
         marginHorizontal: 5,
@@ -130,21 +133,21 @@ const useDynamicStyles = (isRTL : boolean) => {
       },
       currentPrice: {
         fontSize: 12,
-        color: 'red',
+        color: colorScheme === 'dark' ? '#ffcc00' : 'red',
       },
       offerContainer: {
-        backgroundColor: '#FFEEEE80',
+        backgroundColor: colorScheme === 'dark' ? '#55555580' : '#FFEEEE80',
         textAlign: 'center',
         fontSize: 11,
         padding: 3,
         borderRadius: 3,
-        color: 'red',
+        color: colorScheme === 'dark' ? '#ffcc00' : 'red',
       },
       minPrice: {
         fontSize: 12,
         padding: 3,
         borderRadius: 3,
-        color: 'black',
+        color: colorScheme === 'dark' ? '#999999' : 'black',
         textDecorationLine: 'line-through',
       },
       currencyContainer: {
@@ -163,7 +166,7 @@ const useDynamicStyles = (isRTL : boolean) => {
         width: 10,
         height: 10,
         borderRadius: 5,
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        backgroundColor: colorScheme === 'dark' ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
         marginHorizontal: 5,
       },
       activeDot: {
