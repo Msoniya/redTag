@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { StyleSheet, I18nManager, useColorScheme } from 'react-native';
+import { StyleSheet, Dimensions, useColorScheme } from 'react-native';
 import { Colors } from './Colors';
+const { width } = Dimensions.get('window');
 
 const useDynamicStyles = (isRTL : boolean) => {
   const colorScheme = useColorScheme();
@@ -190,6 +191,16 @@ const useDynamicStyles = (isRTL : boolean) => {
         justifyContent:'center',
         textAlign:'center'
       },
+      pagerView: {
+        width: width,
+        height: 250,
+        borderRadius: 5,
+        padding: 5
+      },
+      touhableView : { 
+        width: '100%', 
+        borderRadius: 5 
+      }
     });
   }, [isRTL]);
 };
